@@ -12,15 +12,15 @@
       <h3>Tecnologias utilizadas para o teste</h3>
       <div class="technologies">
         <div class="technology">
-          <VueIcon />
+          <VueIcon style="width: 50px; height: 50px" />
           Vue.Js
         </div>
         <div class="technology">
-          <JsIcon />
+          <JsIcon style="width: 50px; height: 50px" />
           JavaScript
         </div>
         <div class="technology">
-          <GoogleIcon />
+          <GoogleIcon style="width: 50px; height: 50px"  />
           Chart API
         </div>
       </div>
@@ -29,14 +29,9 @@
 </template>
 
 <style scoped>
-@media (min-width: 768px) {
-  .welcome {
-    min-width: 426px;
-    min-height: 500px;
-  }
+@media (max-width: 768px) {
   p {
-    font-size: 18px;
-    max-width: 600px;
+    max-width: 200px !important;
   }
 }
 
@@ -46,15 +41,16 @@
   align-items: flex-end;
 }
 
-p {
-  font-size: 16px;
-  max-width: 200px;
-}
-
 .welcome {
-  display: flex;
   flex-flow: column;
   align-items: center;
+  display: flex;
+  min-height: 500px;
+}
+p {
+  font-size: 16px;
+  max-width: 300px;
+  min-width: 250px;
 }
 
 .technology {

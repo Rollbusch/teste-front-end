@@ -1,9 +1,7 @@
 <template>
   <div>
-    <Loading v-if="loading" />
-    <div v-else>
+    <div v-if="displayChart && students">
       <GChart
-        v-if="displayChart && students"
         type="ColumnChart"
         :data="chartData"
         :options="options"
@@ -20,7 +18,6 @@ export default {
     return {
       chartData: [],
       displayChart: false,
-      loading: true,
       options: {
         'title': 'Quantidade de alunos por série',
         'width': 1000,
@@ -30,7 +27,6 @@ export default {
   },
   beforeMount () {
     this.getData()
-    this.loading = false
   },
   methods: {
     getData () {

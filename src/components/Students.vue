@@ -1,95 +1,110 @@
 <template>
   <div id="students">
-    <h1>Alunos</h1>
+    <h1>{{ list ? 'Aluno' : 'Cadastrar aluno' }}</h1>
     <div v-if="list">
-      <div style="display: flex; justify-content: center; height: 40px;">
-        <h4>Filtro</h4>
-      </div>
-      <div class="filter">
-        <div>
-          <label style="display: block;">Série</label>
-          <select v-model="degreeFilter">
-            <option :value="null">Série</option>
-            <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
-          </select>
+      <div style="display:flex; justify-content: center; flex-flow: column; align-items: center">
+        <div style="display: flex; margin-top: 25px; margin-bottom: 10px" >
+          <button @click="create('unique')" style="margin-right: 25px" class="btn">Cadastrar</button>
+          <button @click="create('300')" style="margin-right: 25px;" class="btn">Gerar 300 cadastros</button>
+          <button @click="filterOptions = !filterOptions" class="btn">{{ filterOptions ? 'Fechar' : 'Filtrar' }}</button>
         </div>
-        <div>
-          <label style="display: block">Classe</label>
-          <select v-model="classFilter" class="select-small">
-            <option :value="null">Classe</option>
-            <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
-          </select>
+        <div v-if="filterOptions" class="filter" style="margin-bottom: 10px">
+          <div style="margin-right: 15px">
+            <label style="display: block;">Série</label>
+            <select v-model="degreeFilter">
+              <option :value="null">Série</option>
+              <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block">Classe</label>
+            <select v-model="classFilter" class="select-small">
+              <option :value="null">Classe</option>
+              <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <Loading v-if="loading" />
-      <div style="display:flex; justify-content: center; flex-flow: column; align-items: center" v-else>
-        <div style="display: flex; margin: 10px">
-          <button @click="create('unique')">Cadastrar</button>
-          <button @click="create('300')">Gerar 300 cadastros</button>
-        </div>
-        <div v-for="(student, i) in filteredStudents" :key="student.id" style="display: flex; height: 50px; padding-bottom: 50px; border-bottom: 1px solid #fff3e2">
-          <div style="margin: 10px">
-            <div>
-              <label style="display:block">Nome do aluno:</label>
-              <input v-model="student.name" :disabled="studentIndex !== i">
-            </div>
-            <div>
-              <label style="display:block">RA:</label>
-              <input v-model="student.ra" :disabled="studentIndex !== i" style="width: 60px">
-            </div>
-          </div>
-          <div style="margin: 10px">
-            <div>
-              <label style="display:block">Série:</label>
-              <select v-model="student.degreeId" :disabled="studentIndex !== i" class="select-medium">
-                <option :value="null">Série</option>
-                <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
-              </select>
-            </div>
-            <div>
-              <label style="display:block">Classe</label>
-              <select v-model="student.classId" :disabled="studentIndex !== i" class="select-small">
-                <option :value="null">Classe</option>
-                <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
-              </select>
-            </div>
-          </div>
-          <div style="display: flex; justify-content: center; align-items: flex-end">
-            <div @click="editStudent(i)" style="margin-right: 10px">
-                <EditIcon style="width: 25px; height: 25px; cursor: pointer;" />
-              </div>
-              <div @click="remove(i)">
-                <TrashIcon style="width: 25px; height: 25px; cursor: pointer;" />
-              </div>
-          </div>
+        <div v-for="(student, i) in filteredStudents" :key="student.id" style="margin-top: 5px; " class="student">
+          <table>
+            <tr class="tr-input" style="padding-bottom: 10px; border-bottom: 1px solid;">
+              <td>
+                <div class="input-list">
+                  <div>
+                    <label style="display:block">Aluno:</label>
+                    <input v-model="student.name" :disabled="studentIndex !== i">
+                  </div>
+                  <div>
+                    <label style="display:block">RA:</label>
+                    <input v-model="student.ra" :disabled="studentIndex !== i" style="width: 60px">
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="input-list">
+                  <div>
+                    <label style="display:block">Série:</label>
+                    <select v-model="student.degreeId" :disabled="studentIndex !== i" class="select-medium">
+                      <option :value="null">Série</option>
+                      <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="display:block">Classe</label>
+                    <select v-model="student.classId" :disabled="studentIndex !== i" class="select-small">
+                      <option :value="null">Classe</option>
+                      <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
+                    </select>
+                  </div>
+                </div>
+              </td>
+              <td style="max-width: 30px !important; display: flex; align-items: flex-end;">
+                <div>
+                  <div class="ico-buttons">
+                    <div @click="editStudent(i)">
+                      <EditIcon class="icon" />
+                    </div>
+                    <div @click="remove(i)">
+                      <TrashIcon class="icon" />
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-else class="register">
       <div>
-        <label>Nome do Aluno:</label>
+        <label style="display:block">Nome do Aluno:</label>
         <input v-model="name" />
       </div>
       <div>
-        <label>RA</label>
+        <label style="display:block">RA:</label>
         <input v-model="ra" :disabled="edit ==='edit'" />
       </div>
       <div>
-        <label>Série</label>
+        <label style="display:block">Série:</label>
         <select v-model="studentClass" :disabled="edit==='edit'" class="select-medium">
           <option :value="null">Série</option>
           <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
         </select>
       </div>
       <div>
-        <label>Classe</label>
+        <label style="display:block">Classe:</label>
         <select v-model="studentDegree">
           <option :value="null">Classe</option>
           <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
         </select>
       </div>
-      <button @click="save">Salvar</button>
-      <button @click="clean">Cancelar</button>
+      <div class="register-buttons">
+        <div @click="save" style="margin-right: 10px;">
+          <SaveIcon class="icon" />
+        </div>
+        <div @click="clean">
+          <CancelIcon class="icon" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -112,9 +127,9 @@ export default {
       studentDegree: null,
       studentClass: null,
       ra: '',
-      loading: false,
       error: [],
-      studentIndex: false
+      studentIndex: false,
+      filterOptions: false
     }
   },
   computed: {
@@ -192,7 +207,6 @@ export default {
         this.edit = 'new'
         this.list = false
       } else {
-        this.loading = true
         let name, ra
         for (let i = 0; i < 300; i++ ) {
           let uniqueRa;
@@ -221,7 +235,6 @@ export default {
           this.allStudents.push(student)
         }
       }
-      this.loading = false
     },
     checkUnique (param) {
       const check = this.allStudents.filter(x => x.ra === param)
@@ -246,7 +259,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 input:focus, select:focus{
   outline: none;
 }
@@ -255,20 +268,48 @@ input:focus, select:focus{
   padding: 25px;
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
   #students {
     max-width: 500px;
   }
+  .ico-buttons {
+    flex-flow: column;
+    align-items: flex-end;
+    max-width: 30px;
+    justify-content: flex-end;
+  }
+  .icon {
+    margin-bottom: 5px;
+  }
+  .input-list {
+    flex-flow: column;
+  }
+  .tr-input {
+    max-width: 330px;
+  }
+  .register {
+    align-items: inherit !important;
+  }
+  
 }
 
-input {
-  border: 1px solid;
-  border-radius: 8px;
+.students-show > div {
+  margin-top: 5px;
+  margin: 0px 7px;
 }
 
 select {
   border: 1px solid;
   border-radius: 8px;
+  padding-left: 1px;
+}
+
+select:disabled {
+  background: #e8e8e8c5;
+}
+
+input:disabled {
+  background: #e8e8e871;
 }
 
 .select-small {
@@ -281,6 +322,57 @@ select {
 
 input {
   width: 120px;
+  border: 1px solid;
+  border-radius: 8px;
+  padding-left: 5px;
+}
+
+.ico-buttons {
+  display: flex; 
+  align-items: normal;
+  height: 100%
+}
+
+td > div > div {
+  margin-right: 30px;
+}
+
+.icon {
+  width: 25px; 
+  height: 25px; 
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.register > div {
+  margin-bottom: 10px;
+  min-width: 250px;
+}
+
+.input-list {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.tr-input {
+  display: flex;
+  justify-content: space-between;
+  width: 550px;
+}
+
+.register-buttons {
+  margin: 10px 0px 0px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.register {
+  margin-top: 20px; 
+  display: flex; 
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>

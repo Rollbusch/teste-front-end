@@ -2,17 +2,24 @@
   <div id="app">
     <div class="container-principal">
       <div id="menu">
-        <button @click="displayContent('home')" :class="{ 'button-active' : homeContent }">Home</button>
-        <button @click="displayContent('student')" :class="{ 'button-active' : studentContent }">Alunos</button>
-        <button @click="displayContent('teachers')" :class="{ 'button-active' : teacherContent }">Professores</button>
-        <button @click="displayContent('chart')" :class="{ 'button-active' : chartContent }">Gráfico</button>
+        <div>
+          <button class="btn" @click="displayContent('home')" :class="{ 'button-active' : homeContent }">Home</button>
+        </div>
+        <div>
+          <button class="btn" @click="displayContent('student')" :class="{ 'button-active' : studentContent }">Alunos</button>
+        </div>
+        <div>
+          <button class="btn" @click="displayContent('teachers')" :class="{ 'button-active' : teacherContent }">Relações</button>
+        </div>
+        <div>
+          <button class="btn" @click="displayContent('chart')" :class="{ 'button-active' : chartContent }">Gráfico</button>
+        </div>
       </div>
       <div id="content">
-        <Loading v-if="loading" />
-        <div class="display" v-else>
+        <div class="display">
           <Home v-if="homeContent" />
           <Students v-if="studentContent" :importStudents="allStudents" :importClasses="allClasses" :importDegrees="allDegrees" />
-          <Teachers 
+          <Relationships 
             v-if="teacherContent" 
             :importStudents="allStudents" 
             :importClasses="allClasses" 
@@ -46,7 +53,6 @@ export default {
       allMatters: matters,
       allRelationships: relationships,
       allTeachers: teachers,
-      loading: false,
       homeContent: true,
       studentContent: false,
       chartContent: false,
@@ -65,11 +71,6 @@ export default {
 </script>
 
 <style>
-#app {
-  justify-content: center;
-  align-items: center;
-}
-
 body {
   background: #fff3e2;
   font-family: 'Ubuntu', serif;
@@ -87,30 +88,39 @@ body {
   height: 50px;
   border-radius: 50px;
   display: flex;
+  justify-content: space-evenly;
   align-items: center;
-  padding-left: 25px;
 }
 
 @media (max-width: 768px) {
   #menu {
-    margin-left: 50px;
-    width: 380px;
+    width: 100%;
     height: 50px;
   }
   #content {
-    margin-left: 55px;
-    width: 380px;
-    min-height: 500px;
+    max-width: 100%;
+    height: auto;
     padding-left: 0px ;
-    margin-top: 25px;
-    border-radius: 50px;
-    background: #ebcfc4;
+  }
+  .btn {
+    width: auto;
+    min-width: 70px;
+  }
+  .display {
+    max-width: 100%;
+  }
+  td {
+    max-width: auto;
+    min-width: 30px !important;
+  }
+  tr {
+    max-width: 400px;
   }
 }
 
 button {
   cursor: pointer;
-  margin-right: 25px;
+  /* margin-right: 25px; */
   border: 1px solid;
   border-radius: 50px;
   height: 35px;
@@ -132,13 +142,14 @@ button:focus {
 }
 
 #content {
-  margin-top: 25px;
+  margin-top: 10px;
   border-radius: 50px;
   background: #ebcfc4;
+  width: 900px;
 } 
 
 .display {
-  width: 100%;
+  width: 900px;
 }
 
 .import-files {
@@ -152,11 +163,12 @@ button:focus {
   flex-flow: column;
 } 
 tr {
-  max-width: 100px;
+  width: 800px;
 } 
 
 td {
-  max-width: 150px;
+  width: auto;
+  max-width: 900px;
 }
 
 .form-list {
@@ -172,6 +184,11 @@ td {
 
 h1 {
   display: inline
+}
+
+.error {
+  color: red;
+  font-weight: 600;
 }
 
 </style>
