@@ -10,14 +10,14 @@
         </div>
         <div v-if="filterOptions" class="filter" style="margin-bottom: 10px">
           <div style="margin-right: 15px">
-            <label style="display: block;">Série</label>
+            <label>Série</label>
             <select v-model="degreeFilter">
               <option :value="null">Série</option>
               <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
             </select>
           </div>
           <div>
-            <label style="display: block">Classe</label>
+            <label>Classe</label>
             <select v-model="classFilter" class="select-small">
               <option :value="null">Classe</option>
               <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
@@ -30,11 +30,11 @@
               <td>
                 <div class="input-list">
                   <div>
-                    <label style="display:block">Aluno:</label>
+                    <label>Aluno:</label>
                     <input v-model="student.name" :disabled="studentIndex !== i">
                   </div>
                   <div>
-                    <label style="display:block">RA:</label>
+                    <label>RA:</label>
                     <input v-model="student.ra" :disabled="studentIndex !== i" style="width: 60px">
                   </div>
                 </div>
@@ -42,14 +42,14 @@
               <td>
                 <div class="input-list">
                   <div>
-                    <label style="display:block">Série:</label>
+                    <label>Série:</label>
                     <select v-model="student.degreeId" :disabled="studentIndex !== i" class="select-medium">
                       <option :value="null">Série</option>
                       <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
                     </select>
                   </div>
                   <div>
-                    <label style="display:block">Classe</label>
+                    <label>Classe</label>
                     <select v-model="student.classId" :disabled="studentIndex !== i" class="select-small">
                       <option :value="null">Classe</option>
                       <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
@@ -76,26 +76,29 @@
     </div>
     <div v-else class="register">
       <div>
-        <label style="display:block">Nome do Aluno:</label>
+        <label>Nome do Aluno:</label>
         <input v-model="name" />
       </div>
       <div>
-        <label style="display:block">RA:</label>
+        <label>RA:</label>
         <input v-model="ra" :disabled="edit ==='edit'" />
       </div>
       <div>
-        <label style="display:block">Série:</label>
+        <label>Série:</label>
         <select v-model="studentClass" :disabled="edit==='edit'" class="select-medium">
           <option :value="null">Série</option>
           <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
         </select>
       </div>
       <div>
-        <label style="display:block">Classe:</label>
+        <label>Classe:</label>
         <select v-model="studentDegree">
           <option :value="null">Classe</option>
           <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
         </select>
+      </div>
+      <div style="display: flex; justify-content: center;">
+        <span v-if="error.includes('emptyFields')" :class="{ 'error' : error.includes('emptyFields') }">Um ou mais campos estão vazios</span>
       </div>
       <div class="register-buttons">
         <div @click="save" style="margin-right: 10px;">
@@ -129,7 +132,7 @@ export default {
       ra: '',
       error: [],
       studentIndex: false,
-      filterOptions: false
+      filterOptions: false,
     }
   },
   computed: {
@@ -143,7 +146,7 @@ export default {
   },
   methods: {
     save () {
-      if (!this.name || !this.ra || !this.studentDegree || !this.studentClass) return false
+      if (!this.name || !this.ra || !this.studentDegree || !this.studentClass) return this.error.push('emptyFields')
       if (this.edit === 'edit') {
         this.allStudents[this.position].name = this.name
         this.allStudents[this.position].ra = this.ra

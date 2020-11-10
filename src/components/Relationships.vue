@@ -9,14 +9,14 @@
       </div>
       <div v-if="filterOptions" class="filter" style="margin-bottom: 10px">
         <div style="margin-right: 15px">
-          <label style="display: block">Série</label>
+          <label>Série</label>
           <select v-model="degreeFilter">
             <option :value="null">Série</option>
             <option v-for="degree in degrees" :key="degree.id" :value="degree.id">{{ degree.name }}</option>
           </select>
         </div>
         <div>
-          <label style="display: block">Classe</label>
+          <label>Classe</label>
           <select v-model="classFilter">
             <option :value="null">Classe</option>
             <option v-for="schoolClass in classes" :key="schoolClass.id" :value="schoolClass.id">{{ schoolClass.name }}</option>
@@ -28,11 +28,11 @@
           <tr v-for="(relationship, i) in filteredRelationships" :key="`${relationship.teacherName}${relationship.id}${i}`">
             <td style="display: flex; border-bottom: 1px solid; padding-bottom: 10px">
               <div style="margin-right: 20px">
-                <label style="display:block">Professor:</label>
+                <label>Professor:</label>
                 <input :value="relationship.teacherName" disabled>
               </div>
               <div>
-                <label style="display:block">Matéria:</label>
+                <label>Matéria:</label>
                 <input :value="relationship.matterName" disabled>
               </div>
             </td>
@@ -48,21 +48,21 @@
     <div v-else>
       <div v-if="newRegister" class="register">
         <div>
-          <label style="display: block">Professor:</label>
+          <label>Professor:</label>
           <select v-model="newTeacher">
             <option :value="null">Professor</option>
             <option v-for="teacher in teachers" :key="teacher.id" :value="teacher.id">{{ teacher.name }}</option>
           </select>
         </div>
         <div>
-          <label style="display: block">Matéria:</label>
+          <label>Matéria:</label>
           <select v-model="newMatter">
             <option :value="null">Matéria</option>
             <option v-for="matter in matters" :key="matter.id" :value="matter.id">{{ matter.name }}</option>
           </select>
         </div>
         <div>
-          <label style="display:block">Séries:</label>
+          <label>Séries:</label>
           <div style="display: flex; align-items: center; height: 19px; align-items: center;">
             <select v-model="newDegree">
               <option :value="null">Séries</option>
@@ -74,7 +74,7 @@
           </div>
           <div v-if="newDegree" style="margin-top:5px">
             <div style="">
-              <label style="display:block">Classes</label>
+              <label>Classes</label>
               <div style="display: flex; ">
                 <select v-model="newClass" style="height: 19px">
                   <option :value="null">Classes</option>
@@ -89,12 +89,12 @@
               <label >{{ grade.className }} <div @click="removeClass(i)" style="display: inline; cursor: pointer"><DeleteItemIcon style="width: 20px" /></div></label>
             </div>
           </div>
-          <label v-if="newDegrees.length > 0" style="display: block; margin-top: 10px">Séries cadastradas:</label>
+          <label v-if="newDegrees.length > 0" style=" margin-top: 10px">Séries cadastradas:</label>
           <div v-for="(degree, i) in newDegrees" :key="degree.id">
-            <label @click="removeDegree(i)">
-              {{ degree.degreeName }}: [
-              <label v-for="(grade, index) in degree.classes" :key="grade.id"> {{ degree.classes.length -1 === index ? grade.className : `${grade.className},` }}</label> ]
-              <div @click="removeClass(i)" style="display: inline; cursor: pointer"><DeleteItemIcon style="width: 20px" /></div>
+            <label>
+              {{ degree.degreeName }}:
+              <label v-for="(grade, index) in degree.classes" :key="grade.id" style="display: inline"> {{ degree.classes.length -1 === index ? grade.className : `${grade.className},` }}</label>
+              <div @click="removeDegree(i)" style="display: inline; cursor: pointer; margin-left: 5px"><DeleteItemIcon style="width: 20px" /></div>
             </label>
           </div>
         </div>
@@ -112,44 +112,50 @@
           </div>
         </div>
       </div>
-      <div v-else>
-        <div>
-          <label>Nome do professor</label>
-          {{ relationship.teacherName }}
+      <div v-else class="registered" style="display:flex; justify-content: center; flex-flow: column; align-items: center">
+        <div style="margin-bottom: 5px">
+          <label>Professor</label>
+          <input :value="relationship.teacherName" disabled>
         </div>
         <div>
-          <label>Nome da matéria</label>
-          {{ relationship.matterName }}
+          <label>Matéria</label>
+          <input :value="relationship.matterName" disabled>
         </div>
-        <h4>Séries em que leciona</h4>
         <div v-if="relationship.degrees">
-          <div v-for="degree in relationship.degrees" :key="degree.id">
+          <h4>Séries em que leciona</h4>
+          <div v-for="degree in relationship.degrees" :key="degree.id" style="margin-top: 15px">
             <div>
-              {{ degree.degreeName }}
+              <label style="font-weight: 600">{{ degree.degreeName }}</label>
               <div v-if="degree.classes">
-                <h5>Classes</h5>
-                <div v-for="classRe in degree.classes" :key="classRe.id">
-                  <select v-if="classRe.classPosition" v-model="classRe.classPosition" disabled>
-                    <option v-for="(schoolClass, i) in classes" :key="i" :value="schoolClass.id">{{ schoolClass.name }}</option>
-                  </select>
-                  <select v-else v-model="classRe.classId" disabled>
-                    <option v-for="(schoolClass, i) in classes" :key="i" :value="schoolClass.id">{{ schoolClass.name }}</option>
-                  </select>
+                <div style="display: flex">
+                  <label>Classes:</label>
+                  <div v-for="classRe in degree.classes" :key="classRe.id" style="display: inline">
+                    <select v-if="classRe.classPosition" v-model="classRe.classPosition" class="selected-grades" disabled>
+                      <option v-for="(schoolClass, i) in classes" :key="i" :value="schoolClass.id" >{{ degree.classes.length -1 === i ? schoolClass.name : `${schoolClass.name},` }}</option>
+                    </select>
+                    <select v-else v-model="classRe.classId" class="selected-grades" disabled>
+                      <option v-for="(schoolClass, i) in classes" :key="i" :value="schoolClass.id">{{ degree.classes.length -1 === i ? schoolClass.name : `${schoolClass.name},` }}</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-              <button @click="getStudentDegree(degree.degreeId)">Procurar</button>
-              <div>
-                Estudantes desta matéria
-                <table>
-                  <tr v-for="(student, i) in studentsByDegree(degree.degreeId)" :key="`${student}${i}`">
+              <table v-if="showStudentsByDegree">
+                <div class="student-list">
+                  <tr v-for="(student, i) in getStudentDegree(degree.degreeId)" :key="`${student}${i}`">
                     <td>{{ student.name }}</td>
                   </tr>
-                </table>
-              </div>
+                </div>
+              </table>
             </div>
           </div>
-        </div>
-        <button @click="relationship = null; list = true">Voltar</button>
+          </div>
+          <div @click="showStudentsByDegree = !showStudentsByDegree" style="display: flex; align-items: center; cursor: pointer">
+            <StudentsIcon style="width: 50px" /> 
+            <label style="margin-left: 10px">Trazer estudantes de cada matéria</label>
+          </div>
+          <div @click="relationship = null; list = true" style="cursor: pointer">
+            <BackArrowIcon style="width: 30px"/>
+          </div>
       </div>
     </div>
   </div>
@@ -182,7 +188,8 @@ export default {
       newRegister: false,
       filterOptions: false,
       gradeName: null,
-      error: []
+      error: [],
+      showStudentsByDegree: false
     }
   },
   computed: {
@@ -248,12 +255,9 @@ export default {
       }
       return relationships
     },
-    getStudentDegree (degree) {
-      let students = this.students.filter(x => x.degreeId === degree)
+    getStudentDegree (id) {
+      let students = this.students.filter(x => x.degreeId === id)
       return students
-    },
-    studentsByDegree (i) {
-      return this.getStudentDegree(i)
     },
     newRelationship () {
       this.newRegister = true
@@ -274,6 +278,7 @@ export default {
       this.clean()
     },
     clean () {
+      this.error = []
       this.newDegree = null
       this.newClasses = []
       this.newClass = null
@@ -333,5 +338,24 @@ export default {
 
 #relationships {
   padding: 25px;
+}
+
+.selected-grades {
+  border: none; 
+  background: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+  color: black;
+  font-weight: 700;
+}
+
+.student-list {
+  width: 200px;
+  background: #fcf7f0;
+  border: 1px solid black;
+  border-radius: 0px 0px 20px 0px;
+  padding: 5px;
 }
 </style>

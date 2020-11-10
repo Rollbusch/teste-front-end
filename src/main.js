@@ -16,6 +16,8 @@ import saveIcon from './icon/SaveIcon'
 import cancelIcon from './icon/CancelIcon'
 import plusIcon from './icon/PlusIcon'
 import deleteItemIcon from './icon/DeleteItemIcon'
+import studentsIcon from './icon/StudentsIcon'
+import backArrowIcon from './icon/BackArrowIcon'
 
 Vue.use(VueGoogleCharts)
 
@@ -35,6 +37,8 @@ Vue.component('SaveIcon', saveIcon)
 Vue.component('CancelIcon', cancelIcon)
 Vue.component('PlusIcon', plusIcon)
 Vue.component('DeleteItemIcon', deleteItemIcon)
+Vue.component('StudentsIcon', studentsIcon)
+Vue.component('BackArrowIcon', backArrowIcon)
 
 new Vue({
   render: h => h(App),

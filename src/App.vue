@@ -90,6 +90,7 @@ body {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  box-shadow: 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {
@@ -121,7 +122,7 @@ body {
 button {
   cursor: pointer;
   /* margin-right: 25px; */
-  border: 1px solid;
+  border: 1px solid #4b4664;
   border-radius: 50px;
   height: 35px;
   width: 100px;
@@ -146,6 +147,7 @@ button:focus {
   border-radius: 50px;
   background: #ebcfc4;
   width: 900px;
+  box-shadow: 1px 2px rgba(0, 0, 0, 0.3);
 } 
 
 .display {
@@ -189,6 +191,10 @@ h1 {
 .error {
   color: red;
   font-weight: 600;
+}
+
+label {
+  display: block;
 }
 
 </style>

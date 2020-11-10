@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <div v-if="displayChart && students">
+  <div id="chart">
+    <div v-if="displayChart && students" class="chart">
       <GChart
-        type="ColumnChart"
+        type="PieChart"
         :data="chartData"
         :options="options"
       />
@@ -19,9 +19,9 @@ export default {
       chartData: [],
       displayChart: false,
       options: {
-        'title': 'Quantidade de alunos por série',
-        'width': 1000,
-        'height': 300
+        backgroundColor:'transparent',
+        width: '350',
+        height: '350'
       }
     }
   },
@@ -58,7 +58,16 @@ export default {
 
 <style scoped>
 .chart {
-  max-width: 95%;
-  max-height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
 }
+
+@media (max-width: 768px) {
+  .chart {
+    max-width: 344px;
+  }
+}
+
 </style>
